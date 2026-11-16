@@ -1,7 +1,11 @@
 import { useAnkiFieldContext } from "#/src/contexts/AnkiFieldsContext";
+import { useConfigContext } from "#/src/contexts/ConfigContext";
 import { useCtxContext } from "#/src/contexts/CtxContext";
+import { useFieldGroupContext } from "#/src/contexts/FieldGroupContext";
 import { useGeneralContext } from "#/src/contexts/GeneralContext";
+import { parseHtml } from "#/src/lib/dom";
 import { ErrorBoundary, For, Show } from "solid-js";
+import { externalLinkIcons } from "./external-link-icons";
 
 export function ExternalLinks() {
   const { $general } = useGeneralContext();
@@ -28,19 +32,46 @@ const LINKS = [
 
 function DefaultExternalLinks() {
   const { $ankiFields } = useAnkiFieldContext();
+  const { $config } = useConfigContext();
+  const { $group } = useFieldGroupContext();
+
+  const $aiHref = () => {
+    const sentence = parseHtml($group().sentenceField).body.textContent?.trim() ?? "";
+    const prompt = $config.aiPrompt
+      .replaceAll("{word}", () => $ankiFields.Expression)
+      .replaceAll("{sentence}", () => sentence);
+    return $config.aiUrl + encodeURIComponent(prompt);
+  };
 
   return (
-    <For each={LINKS}>
-      {([name, url]) => (
+    <>
+      <For each={LINKS}>
+        {([name, url]) => (
+          <a
+            href={url + encodeURIComponent($ankiFields.Expression)}
+            target="_blank"
+            rel="noopener"
+            title={name}
+          >
+            <img
+              class="size-5 object-contain rounded-xs"
+              src={externalLinkIcons[name]}
+              alt={name}
+            />
+          </a>
+        )}
+      </For>
+      <Show when={$config.aiUrl}>
         <a
-          class="text-xs link link-hover opacity-70"
-          href={url + encodeURIComponent($ankiFields.Expression)}
+          class="text-xs font-bold leading-5 px-1 rounded-xs bg-primary text-primary-content"
+          href={$aiHref()}
           target="_blank"
           rel="noopener"
+          title="Ask AI about this word"
         >
-          {name}
+          AI
         </a>
-      )}
-    </For>
+      </Show>
+    </>
   );
 }

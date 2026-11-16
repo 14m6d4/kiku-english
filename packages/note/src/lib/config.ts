@@ -14,6 +14,8 @@ export type KikuConfig = {
   showTheme: boolean;
   showStartupTime: boolean;
   ankiConnectAddress: string;
+  aiUrl: string;
+  aiPrompt: string;
   ankiDroidEnableIntegration: boolean;
   ankiDroidReverseSwipeDirection: boolean;
   swapSentenceAndDefinitionOnMobile: boolean;
@@ -72,12 +74,7 @@ export const tailwindContainerSizeVar = {
   "7xl": { maxWidth: "var(--container-7xl)" },
 };
 
-const rootDatasetArray = [
-  "theme",
-  "themeDark",
-  "blurNsfw",
-  "pictureOnFront",
-] as const;
+const rootDatasetArray = ["theme", "themeDark", "blurNsfw", "pictureOnFront"] as const;
 export type RootDatasetKey = (typeof rootDatasetArray)[number];
 export type RootDataset = Partial<Record<RootDatasetKey, string>>;
 export const rootDatasetConfigWhitelist = new Set<RootDatasetKey>(rootDatasetArray);
@@ -99,6 +96,8 @@ export function validateConfig(config: KikuConfig, logger?: Logger): KikuConfig 
       showTheme: typeof config.showTheme === "boolean" ? config.showTheme : defaultConfig.showTheme,
       showStartupTime: typeof config.showStartupTime === "boolean" ? config.showStartupTime : defaultConfig.showStartupTime,
       ankiConnectAddress: typeof config.ankiConnectAddress === "string" ? config.ankiConnectAddress : defaultConfig.ankiConnectAddress,
+      aiUrl: typeof config.aiUrl === "string" ? config.aiUrl : defaultConfig.aiUrl,
+      aiPrompt: typeof config.aiPrompt === "string" ? config.aiPrompt : defaultConfig.aiPrompt,
       ankiDroidEnableIntegration: typeof config.ankiDroidEnableIntegration === "boolean" ? config.ankiDroidEnableIntegration : defaultConfig.ankiDroidEnableIntegration,
       ankiDroidReverseSwipeDirection: typeof config.ankiDroidReverseSwipeDirection === "boolean" ? config.ankiDroidReverseSwipeDirection : defaultConfig.ankiDroidReverseSwipeDirection,
       swapSentenceAndDefinitionOnMobile: typeof config.swapSentenceAndDefinitionOnMobile === "boolean" ? config.swapSentenceAndDefinitionOnMobile : defaultConfig.swapSentenceAndDefinitionOnMobile,
@@ -279,7 +278,10 @@ export const DARK_VARS_REGEX =
   /\.card:has\(> #qa, #content > #qa\)\.nightMode, \.nightMode #kikuen-host::part\(root\), \.nightMode #kikuen-root, :host\(\[data-dark-mode\]\) #kikuen-root \{[^]*?\}/;
 
 export function generateCssVars(vars: Record<string, string>): string {
-  return objectToCss(".card:has(> #qa, #content > #qa), #kikuen-host::part(root), #kikuen-root", vars);
+  return objectToCss(
+    ".card:has(> #qa, #content > #qa), #kikuen-host::part(root), #kikuen-root",
+    vars,
+  );
 }
 
 export function generateCssVarsDark(vars: Record<string, string>): string {

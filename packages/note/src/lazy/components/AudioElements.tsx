@@ -4,6 +4,7 @@ import { useAnkiFieldContext } from "#/src/contexts/AnkiFieldsContext";
 import { useConfigContext } from "#/src/contexts/ConfigContext";
 import { useFieldGroupContext } from "#/src/contexts/FieldGroupContext";
 import { useGeneralContext } from "#/src/contexts/GeneralContext";
+import { AnkiConnect } from "#/src/lib/anki-connect";
 
 function AudioTag(props: { text: string }) {
   // Find all `[sound:filename.mp3]` occurrences
@@ -26,9 +27,9 @@ function AudioTag(props: { text: string }) {
 export function AudioElements() {
   const { $ankiFields, $isRootAnkiFields } = useAnkiFieldContext();
   const { $card, $setCard, nested } = useCardContext();
-  const { $group } = useFieldGroupContext();
+  const { $group, $index } = useFieldGroupContext();
   const { $config } = useConfigContext();
-  const { logger, isAnkiDroidOldStudyScreen } = useGeneralContext();
+  const { logger, aborter, isAnkiDroidOldStudyScreen } = useGeneralContext();
   const hiddenStyle = {
     width: "0",
     height: "0",
@@ -86,6 +87,46 @@ export function AudioElements() {
       },
     ),
   );
+
+  // The back template cut Anki's queue down to the expression audio (see
+  // template/back.html). Play the sentence audio of the group on screen once
+  // the expression audio is over.
+  onMount(async () => {
+    const w = window as {
+      kikuenSentenceAudio?: { play?: string; at: number };
+      pycmd?: (cmd: string) => void;
+    };
+    const pending = w.kikuenSentenceAudio;
+    delete w.kikuenSentenceAudio;
+    const play = pending?.play;
+    if (nested || !pending || !play) return;
+
+    // ponytail: Anki does not tell the page when a sound ends, so the length is
+    // read from the file, whose name only AnkiConnect knows. Without it, guess.
+    let seconds = 1.5;
+    try {
+      const { result } = await AnkiConnect.invoke("cardsInfo", {
+        cards: [Number($ankiFields.CardID)],
+      });
+      const file = result[0].fields.ExpressionAudio.value.match(/\[sound:([^\]]+)\]/)[1];
+      seconds = await new Promise<number>((resolve, reject) => {
+        const audio = new Audio(encodeURIComponent(file));
+        audio.onloadedmetadata = () => resolve(audio.duration);
+        audio.onerror = reject;
+      });
+    } catch (e) {
+      logger.debug("[AudioElements] expression audio length unknown:", e);
+    }
+
+    // 200ms covers the delay before Anki's player starts.
+    const wait = pending.at + seconds * 1000 + 200 - performance.now();
+    setTimeout(() => {
+      // Skip when the card or the group changed meanwhile.
+      if (aborter.signal.aborted || $index() !== 0) return;
+      logger.info("[AudioElements] autoPlay: sentence of the current group");
+      w.pycmd?.(play);
+    }, wait);
+  });
 
   onMount(() => {
     if ($card.isNsfw && $config.muteNsfw && !isAnkiDroidOldStudyScreen) {

@@ -60,6 +60,37 @@ This file is auto-generated. Any manual changes will be lost on save.
   <template data-field="CardID">{{CardID}}</template>
 </template>
 
+<script>
+  // Anki queues every [sound:] tag of the answer, so a note with several groups
+  // would play the sentence audio of all of them. Cut the queue down to the
+  // expression audio; AudioElements then plays the group on screen.
+  (() => {
+    if (typeof pycmd !== "function") return;
+    const fields = document.querySelector("#anki-fields")?.content;
+    const field = (name) => fields?.querySelector(`[data-field="${name}"]`)?.content;
+    const play = (el) =>
+      el
+        ?.querySelector("a")
+        ?.getAttribute("onclick")
+        ?.match(/play:a:\d+/)?.[0];
+
+    const audios = [...(field("SentenceAudio")?.querySelectorAll("[data-group-id]") ?? [])];
+    if (audios.length < 2) return;
+    // The group on screen is the one with the highest id, across all grouped fields.
+    const ids = [...fields.querySelectorAll("template")].flatMap((t) =>
+      [...t.content.querySelectorAll("[data-group-id]")].map((el) => Number(el.dataset.groupId)),
+    );
+    const current = String(Math.max(...ids));
+    const sentence = play(audios.find((el) => el.dataset.groupId === current));
+    const expression = play(field("ExpressionAudio"));
+
+    if (expression) {
+      pycmd(expression);
+      window.kikuenSentenceAudio = { play: sentence, at: performance.now() };
+    } else if (sentence) pycmd(sentence);
+  })();
+</script>
+
 <!-- ERROR_TEMPLATE -->
 
 <!-- HYDRATION_SCRIPT -->

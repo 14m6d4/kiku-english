@@ -695,6 +695,8 @@ function DebugSettings() {
         <div class="flex flex-col gap-4 animate-fade-in ">
           <div class="grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] rounded-box gap-x-4 gap-y-2">
             <TextSetting configKey="ankiConnectAddress" label="AnkiConnect Address" />
+            <TextSetting configKey="aiUrl" label="Ask AI URL (empty to hide)" />
+            <TextSetting configKey="aiPrompt" label="Ask AI Prompt ({word}, {sentence})" />
             <ToggleSetting configKey="showStartupTime" label="Show Startup Time" />
           </div>
           <div class="flex flex-col gap-2">

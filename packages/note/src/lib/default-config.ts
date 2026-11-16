@@ -12,6 +12,9 @@ export const defaultConfig: KikuConfig = {
   showTheme: true,
   showStartupTime: true,
   ankiConnectAddress: "http://127.0.0.1:8765",
+  aiUrl: "https://chatgpt.com/?q=",
+  aiPrompt:
+    'I am learning English. Explain "{word}" as it is used in this sentence: "{sentence}". Give the meaning in this context, the nuance and register, common collocations, three more example sentences, and similar words with how they differ.',
   ankiDroidEnableIntegration: true,
   ankiDroidReverseSwipeDirection: false,
   swapSentenceAndDefinitionOnMobile: true,
