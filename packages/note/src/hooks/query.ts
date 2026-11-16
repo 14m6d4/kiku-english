@@ -6,6 +6,7 @@ import { type Store, unwrap } from "solid-js/store";
 import { useGeneralContext } from "#/src/contexts/GeneralContext";
 import { parseRelatedExpression } from "#/src/lib/parse-related-expression";
 import { useWorker } from "./worker";
+import { ipaKey } from "#/src/lib/ipa-key";
 
 export function useCardQuery({
   $initialSide,
@@ -19,11 +20,11 @@ export function useCardQuery({
   const { getWorker } = useWorker();
 
   const $expression = createMemo(() => ankiFields.Expression);
-  const $expressionReading = createMemo(() => ankiFields.ExpressionReading);
+  const $expressionReading = createMemo(() => ipaKey(ankiFields.ExpressionReading));
   const $isFront = createMemo(() => $initialSide() === "front");
   const $readingList = createMemo(() => {
     if ($isFront() || !ankiFields.ExpressionReading) return [];
-    return [ankiFields.ExpressionReading];
+    return [$expressionReading()];
   });
   const $relatedExpressions = createMemo(() => {
     if ($isFront()) return [];

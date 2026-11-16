@@ -1,6 +1,7 @@
 import { parseRelatedExpression } from "#/src/lib/parse-related-expression";
 import type { AnkiNote } from "#/src/lib/types";
 import type { MainThreadApi } from "./MainThreadApi";
+import { ipaKey, ipaKeySearchPattern } from "#/src/lib/ipa-key";
 
 export function escapeRegex(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -54,11 +55,11 @@ export class AnkiConnect {
   }) {
     const noteFilter = `"note:Kiku English"`;
 
-    const readingPattern = readingList.map(escapeRegex).join("|");
+    const readingPattern = readingList.map(ipaKeySearchPattern).join("|");
     const readingQuery =
       readingList.length === 0
         ? null
-        : `${noteFilter} AND ExpressionReading:re:^${readingPattern}$`;
+        : `${noteFilter} AND "ExpressionReading:re:${readingPattern}"`;
 
     const expressionPattern = expressionList.map(escapeRegex).join("|");
     const expressionQuery =
@@ -83,7 +84,9 @@ export class AnkiConnect {
     const expressionListResult: Record<string, AnkiNote[]> = {};
 
     for (const r of readingList) {
-      readingListResult[r] = allNotes.filter((n) => n.fields.ExpressionReading?.value === r);
+      readingListResult[r] = allNotes.filter(
+        (n) => ipaKey(n.fields.ExpressionReading?.value) === r,
+      );
     }
 
     for (const e of expressionList) {

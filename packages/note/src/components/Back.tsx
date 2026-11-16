@@ -105,9 +105,10 @@ export function Back(props: { onExitNested?: () => void }) {
             >
               <div class="expression-audio-box">
                 <ExpressionSection />
-                <div class="mt-2 sm:mt-4 reading text-center text-base-content-calm min-h-lh">
-                  {isServer ? "{{ExpressionReading}}" : $ankiFields.ExpressionReading}
-                </div>
+                <div
+                  class="mt-2 sm:mt-4 reading text-center text-base-content-calm min-h-lh"
+                  innerHTML={isServer ? "{{ExpressionReading}}" : $ankiFields.ExpressionReading}
+                ></div>
                 <div class="hidden sm:block sm:h-8 sm:mt-2">
                   {$card.ready && (
                     <div class="animate-fade-in-sm flex gap-2">

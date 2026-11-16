@@ -1,4 +1,12 @@
 @layer components {
+  /* Yomitan's {phonetic-transcriptions} is a list, one item per accent: show it on one line. */
+  ul:has(> li.pronunciation) {
+    @apply flex flex-wrap justify-center gap-x-4 list-none p-0 m-0;
+  }
+  li.pronunciation > i {
+    @apply not-italic;
+  }
+
   .expression-picture-box {
     @apply flex rounded-lg gap-2 sm:gap-4 flex-col sm:flex-row relative z-10;
   }

@@ -1,3 +1,4 @@
+import { ipaKey } from "#/src/lib/ipa-key";
 import {
   createEffect,
   createMemo,
@@ -57,9 +58,13 @@ function $RelatedExpression() {
           if (excludeNewCards)
             return (
               !newCardIds.has(v.cards[0]) &&
-              v.fields["ExpressionReading"].value !== initialAnkiFields.ExpressionReading
+              ipaKey(v.fields["ExpressionReading"].value) !==
+                ipaKey(initialAnkiFields.ExpressionReading)
             );
-          return v.fields["ExpressionReading"].value !== initialAnkiFields.ExpressionReading;
+          return (
+            ipaKey(v.fields["ExpressionReading"].value) !==
+            ipaKey(initialAnkiFields.ExpressionReading)
+          );
         })
         .sort(sortNote);
     }
@@ -215,9 +220,13 @@ function $RelatedExpression() {
               }}
               on:touchend={(e) => e.stopPropagation()}
             >
-              {$initialSide() === "front"
-                ? note.fields.ExpressionReading.value
-                : note.fields.Expression.value}
+              <span
+                innerHTML={
+                  $initialSide() === "front"
+                    ? note.fields.ExpressionReading.value
+                    : note.fields.Expression.value
+                }
+              />
               <Show when={isNew}>
                 <span class="status status-info"></span>
               </Show>

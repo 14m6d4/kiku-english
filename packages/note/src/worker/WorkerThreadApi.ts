@@ -1,12 +1,9 @@
 import "#/src/lib/polyfill";
+import { ipaKey } from "#/src/lib/ipa-key";
 import type { KikuConfig } from "#/src/lib/config";
 import type { Constants } from "#/src/lib/contants";
 import { parseRelatedExpression } from "#/src/lib/parse-related-expression";
-import type {
-  AnkiFields,
-  AnkiNote,
-  KikuNotesManifest,
-} from "#/src/lib/types";
+import type { AnkiFields, AnkiNote, KikuNotesManifest } from "#/src/lib/types";
 
 import { AnkiConnect } from "./AnkiConnect";
 import { type NexRemote } from "./nex";
@@ -78,7 +75,7 @@ export class WorkerThreadApi {
           if (note.modelName !== "Kiku English") continue;
 
           const expr = note.fields.Expression.value;
-          const reading = note.fields.ExpressionReading?.value ?? "";
+          const reading = ipaKey(note.fields.ExpressionReading?.value);
           const relatedExprValue = note.fields.RelatedExpression?.value ?? "";
 
           // ------- Reading Search (exact) -------
@@ -220,12 +217,11 @@ export class WorkerThreadApi {
     const batchedExpressionList = [...new Set(requests.flatMap((r) => r.expressionList))];
     const needsNewNotes = requests.some((r) => r.withNewNotes);
 
-    const { readingListResult, expressionListResult, newNotes, isNotesCache } =
-      await this.query({
-        readingList: batchedReadingList,
-        expressionList: batchedExpressionList,
-        withNewNotes: needsNewNotes,
-      });
+    const { readingListResult, expressionListResult, newNotes, isNotesCache } = await this.query({
+      readingList: batchedReadingList,
+      expressionList: batchedExpressionList,
+      withNewNotes: needsNewNotes,
+    });
 
     for (const req of requests) {
       const { readingList, expressionList, ankiFields } = req;

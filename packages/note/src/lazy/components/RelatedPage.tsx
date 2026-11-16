@@ -77,9 +77,10 @@ function Page() {
         <div class="flex flex-col items-center gap-2 animate-fade-in">
           <div class="font-secondary text-5xl sm:text-6xl">{initialAnkiFields.Expression}</div>
           <Show when={initialAnkiFields.ExpressionReading}>
-            <div class="text-base-content-calm text-base sm:text-lg">
-              {initialAnkiFields.ExpressionReading}
-            </div>
+            <div
+              class="text-base-content-calm text-base sm:text-lg"
+              innerHTML={initialAnkiFields.ExpressionReading}
+            ></div>
           </Show>
           <div class="text-base-content-calm text-base sm:text-lg">
             {TABS.find((t) => t.tab === $relatedPage.tab)?.title}
@@ -182,7 +183,7 @@ function AnkiNoteItem(props: { data: AnkiNote }) {
         <div class="flex gap-2 items-end flex-wrap">
           <div class="font-secondary text-2xl sm:text-4xl">{$data().fields.Expression.value}</div>
           <div class="text-base-content-calm text-xs sm:text-sm">
-            <div>{$data().fields.ExpressionReading?.value}</div>
+            <div innerHTML={$data().fields.ExpressionReading?.value} />
             <div>{new Date($data().noteId).toLocaleDateString()}</div>
           </div>
         </div>
