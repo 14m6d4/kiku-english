@@ -8,10 +8,13 @@ export function Expression() {
   return (
     <>
       {$ankiFields.Expression}
-      {/* On the front the reading stays hidden until the expression is hovered. */}
+      {/* On the front the reading stays hidden until the box is hovered. The
+          wrapper has no height, so the expression stays centred. */}
       <Show when={$initialSide() === "front" && $ankiFields.ExpressionReading}>
-        <div class="reading font-primary mt-2 sm:mt-4 min-h-lh text-base-content-calm opacity-0 transition-opacity duration-300 [.expression-audio-box:hover_&]:opacity-100">
-          {$ankiFields.ExpressionReading}
+        <div class="h-0 flex justify-center whitespace-nowrap">
+          <div class="reading font-primary pt-2 sm:pt-4 text-base-content-calm opacity-0 transition-opacity duration-300 [.expression-audio-box:hover_&]:opacity-100">
+            {$ankiFields.ExpressionReading}
+          </div>
         </div>
       </Show>
     </>
