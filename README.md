@@ -85,7 +85,7 @@ Installing a plugin overwrites the current `_kikuen_plugin.*` files, so only one
 From `packages/note`:
 
 - `pnpm dev` serves a preview of the card's back side on <http://localhost:5173>; add `?side=front#` for the front. Example fields come from `src/lib/examples.ts`.
-- `pnpm apply` builds and pushes the note type to Anki (see Install). `pnpm apply:fast` skips the type check, but needs a POSIX shell.
+- `pnpm apply` builds and pushes the note type to Anki (see Install). `pnpm apply:fast` skips the type check and type declarations.
 
 From the root: `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`.
 

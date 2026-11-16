@@ -8,24 +8,31 @@ import { paths } from "./tools/paths.js";
 import { getVersion } from "./tools/util.js";
 import { serveAnkiCollectionMedia } from "./tools/vite-plugin-serve-anki-collection.media.js";
 
-const fastBuild = process.env.FAST_BUILD === "true";
-const plugins: PluginOption[] = [solid({ ssr: true }), tailwindcss()];
-if (!fastBuild) {
-  plugins.push(serveAnkiCollectionMedia());
-  plugins.push(circularDpendency({ outputFilePath: "./.circularDependency.json" }));
-  plugins.push(dts({ tsconfigPath: "./tsconfig.app.json", outDirs: "./dist/types" }));
-}
+const version = await getVersion();
 
-export default defineConfig({
-  plugins,
+// `vite build --mode fast` skips dts, the circular-dependency check and the dev media server
+export default defineConfig(({ mode }) => ({
+  plugins: [
+    solid({ ssr: true }),
+    tailwindcss(),
+    ...(mode === "fast"
+      ? []
+      : [
+          serveAnkiCollectionMedia(),
+          circularDpendency({ outputFilePath: "./.circularDependency.json" }),
+          dts({ tsconfigPath: "./tsconfig.app.json", outDirs: "./dist/types" }),
+        ]),
+  ] satisfies PluginOption[],
   resolve: {
     alias: {
       "#": paths["@/"],
     },
   },
   define: {
-    __VERSION__: JSON.stringify(await getVersion()),
-    __COMMIT_SHA__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA ?? execSync("git rev-parse HEAD").toString().trim()),
+    __VERSION__: JSON.stringify(version),
+    __COMMIT_SHA__: JSON.stringify(
+      process.env.VERCEL_GIT_COMMIT_SHA ?? execSync("git rev-parse HEAD").toString().trim(),
+    ),
   },
   build: {
     lib: {
@@ -83,4 +90,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
