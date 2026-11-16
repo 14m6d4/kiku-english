@@ -54,7 +54,7 @@ export class AnkiConnect {
     expressionList: string[];
     withNewNotes?: boolean;
   }) {
-    const noteFilter = `("note:Kiku" OR "note:Lapis")`;
+    const noteFilter = `"note:Kiku English"`;
 
     const kanjiPattern = kanjiList.map(escapeRegex).join("|");
     const kanjiQuery =

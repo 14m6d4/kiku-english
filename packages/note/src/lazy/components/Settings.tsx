@@ -156,20 +156,20 @@ export function Settings() {
 
 function KikuIcon() {
   const [$$latestVersion] = createResource(async () => {
-    const cached = sessionStorage.getItem(constants.key["kiku-latest-version"]);
+    const cached = sessionStorage.getItem(constants.key["kikuen-latest-version"]);
     if (cached) return cached;
 
-    const checked = sessionStorage.getItem(constants.key["kiku-latest-version-checked"]);
+    const checked = sessionStorage.getItem(constants.key["kikuen-latest-version-checked"]);
     if (checked) return null;
-    sessionStorage.setItem(constants.key["kiku-latest-version-checked"], "true");
+    sessionStorage.setItem(constants.key["kikuen-latest-version-checked"], "true");
 
-    const res = await fetch("https://api.github.com/repos/youyoumu/kiku/releases/latest");
+    const res = await fetch("https://api.github.com/repos/14m6d4/kiku-english/releases/latest");
     if (!res.ok) return null;
     const data = await res.json();
     const tag_name = data?.tag_name;
     const version = tag_name?.replace(/^v/, "");
     if (!version) return null;
-    sessionStorage.setItem(constants.key["kiku-latest-version"], version);
+    sessionStorage.setItem(constants.key["kikuen-latest-version"], version);
     return version;
   });
 
@@ -195,7 +195,7 @@ function KikuVersion(props: { latestVersion?: string | null }) {
         data-tip={$version() ? `Update Available: v${$version()}` : undefined}
       >
         <a
-          href="https://github.com/youyoumu/kiku/releases/latest"
+          href="https://github.com/14m6d4/kiku-english/releases/latest"
           target="_blank"
           rel="noreferrer"
           class="text-sm"
@@ -203,7 +203,7 @@ function KikuVersion(props: { latestVersion?: string | null }) {
           Kiku Note v{constants.VERSION}
         </a>
         <a
-          href={`https://github.com/youyoumu/kiku/commit/${constants.COMMIT_SHA}`}
+          href={`https://github.com/14m6d4/kiku-english/commit/${constants.COMMIT_SHA}`}
           target="_blank"
           rel="noreferrer"
           class="text-xs"

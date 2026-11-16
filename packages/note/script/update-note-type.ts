@@ -11,11 +11,11 @@ import { paths } from "#/tools/paths.ts";
 import { AnkiConnect, log } from "#/tools/util.js";
 
 class Script {
-  NOTE_TYPE = "Kiku";
+  NOTE_TYPE = "Kiku English";
   CARD_TYPE = "Mining";
-  FRONT_PATH = paths["@/.anki-build/_kiku_front.html"];
-  BACK_PATH = paths["@/.anki-build/_kiku_back.html"];
-  STYLE_PATH = paths["@/.anki-build/_kiku_style.css"];
+  FRONT_PATH = paths["@/.anki-build/_kikuen_front.html"];
+  BACK_PATH = paths["@/.anki-build/_kikuen_back.html"];
+  STYLE_PATH = paths["@/.anki-build/_kikuen_style.css"];
 
   async readTemplates() {
     const [front, back, style] = await Promise.all([
