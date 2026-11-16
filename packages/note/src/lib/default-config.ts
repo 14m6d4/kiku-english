@@ -14,7 +14,7 @@ export const defaultConfig: KikuConfig = {
   ankiConnectAddress: "http://127.0.0.1:8765",
   aiUrl: "https://chatgpt.com/?q=",
   aiPrompt:
-    'I am learning English. Explain "{word}" as it is used in this sentence: "{sentence}". Give the meaning in this context, the nuance and register, common collocations, three more example sentences, and similar words with how they differ.',
+    'Tôi đang học tiếng Anh. Hãy giải thích từ "{word}" trong câu sau: "{sentence}". Cho tôi biết nghĩa trong ngữ cảnh này, sắc thái và mức độ trang trọng, các cụm từ thường đi kèm, ba câu ví dụ khác, và các từ gần nghĩa cùng điểm khác nhau giữa chúng. Trả lời bằng tiếng Việt.',
   ankiDroidEnableIntegration: true,
   ankiDroidReverseSwipeDirection: false,
   swapSentenceAndDefinitionOnMobile: true,
