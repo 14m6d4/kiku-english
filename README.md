@@ -69,7 +69,7 @@ Mine the word with Yomitan first, then use asbplayer's "update last card" to add
 
 ## Plugins
 
-The card loads `_kikuen_plugin.js` and `_kikuen_plugin.css` from Anki's `collection.media`; `pnpm apply` ships them empty. Write your own (hooks are typed in `packages/note/plugins/plugin-types.ts`) or install an example from `packages/note/plugins/`:
+The card loads `_kikuen_plugin.js` and `_kikuen_plugin.css` from Anki's `collection.media`; `pnpm apply` creates them empty on the first run. Write your own (hooks are typed in `packages/note/plugins/plugin-types.ts`) or install an example from `packages/note/plugins/`:
 
 ```sh
 cd packages/note
@@ -78,7 +78,7 @@ pnpm plugin:copy confetti     # or plugin:symlink to edit it in place
 
 Installing a plugin overwrites the current `_kikuen_plugin.*` files, so only one example is active at a time. Run either command without a name to list the examples.
 
-`pnpm apply` resets both files to the empty stubs every time, so install the plugin again after each apply.
+`pnpm apply` creates the empty stubs only when the files are missing, so an installed plugin survives it.
 
 ## Development
 

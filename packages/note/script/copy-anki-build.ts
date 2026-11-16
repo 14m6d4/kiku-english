@@ -25,13 +25,13 @@ class Script {
     }
   }
 
-  async copyFiles(files: string[], srcDir: string) {
+  async copyFiles(files: string[], srcDir: string, { overwrite = true } = {}) {
     for (const file of files) {
       const src = join(srcDir, file);
       await stat(src);
       const dest = join(env.ANKI_COLLECTION_MEDIA_PATH, file);
-      await cp(src, dest);
-      console.log(`✅ Copied ${basename(src)}`);
+      await cp(src, dest, { force: overwrite });
+      console.log(`✅ Copied ${basename(src)}${overwrite ? "" : " (kept if present)"}`);
     }
   }
 
@@ -46,12 +46,13 @@ class Script {
       "_kikuen_libs.js",
       "_kikuen_shared.js",
       "_kikuen_worker.js",
-      "_kikuen_plugin.js",
-      "_kikuen_plugin.css",
     ];
+    // The plugin files belong to the user once installed; only seed the empty stubs.
+    const PLUGIN_FILES = ["_kikuen_plugin.js", "_kikuen_plugin.css"];
 
     console.log("\n📁 Copying ANKI BUILD files...");
     await this.copyFiles(FILES, paths["@/.anki-build/"]);
+    await this.copyFiles(PLUGIN_FILES, paths["@/.anki-build/"], { overwrite: false });
   }
 
   async run() {
