@@ -11,12 +11,12 @@ export const plugin = {
     const root = $general.root;
     const layout = $general.layoutRef;
     const fontsPool = [
-      "'Hiragino Mincho ProN', serif",
-      "'Noto Serif CJK JP', serif",
-      "'Yu Mincho', serif",
-      "'HanaMinA', 'HanaMinB', serif",
-      "'Noto Sans CJK JP', sans-serif",
-      "'Rounded Mplus 1c', sans-serif",
+      "'Georgia', serif",
+      "'Charter', 'Cambria', serif",
+      "'Times New Roman', serif",
+      "'Segoe UI', 'Roboto', sans-serif",
+      "'Verdana', sans-serif",
+      "'Courier New', monospace",
     ];
 
     const randomFont = fontsPool[Math.floor(Math.random() * fontsPool.length)];

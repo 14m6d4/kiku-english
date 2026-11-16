@@ -26,89 +26,9 @@
     }
   }
 
-  li[data-dictionary*="Jitendex.org"],
   div[class="yomitan-glossary"] {
     i:first-child {
       color: var(--color-base-content-calm) !important;
     }
-  }
-
-  /*
-  *   ────────────────────────────── Jitendex ─────────────────────────────
-  */
-  div[data-sc-content="example-sentence"] {
-    background-color: var(--color-base-300) !important;
-    border-color: var(--color-primary) !important;
-    span[style^="color"] {
-      color: var(--color-base-content-primary) !important;
-    }
-  }
-
-  span[data-sc-content="example-keyword"] {
-    color: var(--color-base-content-primary) !important;
-  }
-
-  div[data-sc-content="sense-note"] {
-    background-color: var(--color-base-300) !important;
-    border-color: var(--color-warning) !important;
-    div[style*="color"] {
-      color: var(--color-base-content-soft) !important;
-    }
-  }
-
-  div[data-sc-content="xref"] {
-    background-color: var(--color-base-300) !important;
-    border-color: var(--color-primary) !important;
-    & span[data-sc-content="reference-label"] {
-      color: var(--color-base-content-primary) !important;
-    }
-  }
-
-  span[style*="color: rgb(86, 86, 86)"],
-  span[data-sc-content="part-of-speech-info"],
-  span[data-sc-content="forms-label"] {
-    background-color: var(--color-secondary) !important;
-    color: var(--color-secondary-content) !important;
-  }
-
-  span[style*="background-color: brown"],
-  span[data-sc-content="misc-info"] {
-    background-color: var(--color-accent) !important;
-    color: var(--color-accent-content) !important;
-  }
-
-  span[style*="background-color: purple"],
-  span[data-sc-content="field-info"] {
-    background-color: var(--color-primary) !important;
-    color: var(--color-primary-content) !important;
-  }
-
-  /*
-  *   ─────────────────────────────── JMdict ──────────────────────────────
-  */
-
-  [data-details="JMdict"] > .dict-group__tag-list::before {
-    content: "(";
-  }
-
-  [data-details="JMdict"] > .dict-group__tag-list::after {
-    content: ") ";
-  }
-
-  [data-details="JMdict"] .dict-group__tag-list .dict-group__tag:not(:first-child)::before {
-    content: ", ";
-  }
-
-  ol:has(> li[data-details="JMdict"]) {
-    list-style-type: number;
-  }
-
-  ol:has(> li[data-dictionary^="JMdict"]) {
-    list-style-type: number;
-  }
-
-  ol:has(> li[data-dictionary^="JMdict"]) ul {
-    padding-left: 1em;
-    list-style-type: circle;
   }
 }

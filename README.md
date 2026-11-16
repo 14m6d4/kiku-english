@@ -1,56 +1,77 @@
-# Kiku
+# Kiku English
 
-![Downloads](https://img.shields.io/github/downloads/youyoumu/kiku/total.svg?label=Downloads)
-![Release](https://img.shields.io/github/v/release/youyoumu/kiku?label=Latest%20Version)
-![Addon](https://img.shields.io/badge/Addon-v1.1.1-blue?logo=anki&link=https%3A%2F%2Fankiweb.net%2Fshared%2Finfo%2F408592650%3Fcb%3D1763445474367)
-![Anki](https://img.shields.io/badge/Anki-_25.09.2-blue?logo=anki)
-![Platform](https://img.shields.io/badge/Platform-Desktop%20%2B%20Mobile-green)
-![License](https://img.shields.io/github/license/youyoumu/kiku?label=License)
-![GitHub top language](https://img.shields.io/github/languages/top/youyoumu/kiku)
+An Anki note type for learning English by sentence mining with Yomitan and asbplayer.
 
-<br/>
-<div align="center">
-  <div>
-    <a href="https://kiku.youyoumu.my.id/">Documentation</a> |
-    <a href="https://kiku.youyoumu.my.id/features.html">Features</a> |
-    <a href="https://kiku.youyoumu.my.id/installation.html">Installation</a> |
-    <a href="https://ankiweb.net/shared/info/408592650?cb=1763445474367">Addon</a>
-  </div>
-  <br/>
+Kiku English is a hard fork of [Kiku](https://github.com/youyoumu/kiku) by youyoumu, which is built for Japanese learners. The card behaves the same way; the Japanese-only parts (furigana, pitch accent, kanji lookups, vertical text) are removed, and a few things are changed for English:
 
-<img height="256" alt="logo" src="https://github.com/user-attachments/assets/344130d4-76be-473b-bde1-17fa687cf574" />
+- The pronunciation (IPA) is shown under the word.
+- Lookup links go to Cambridge, Oxford Learner's, YouGlish and Google.
+- Fonts default to Latin system fonts.
+- Each dictionary gets its own definition page, in the order Yomitan lists them.
 
-<br/>
-<br/>
-<p>A feature-rich, fully interactive Anki note type designed for Japanese learners.</p>
-</div>
+The note type is called `Kiku English` and its files are prefixed `_kikuen`, so it can be installed next to the original `Kiku`.
 
-<hr/>
+Terms used in this project are defined in [GLOSSARY.md](GLOSSARY.md). Why this is a fork rather than a plugin is recorded in [docs/adr](docs/adr/0001-hard-fork-and-delete-japanese-code.md).
 
-## Get Started
+## Install
 
-To get started, visit the documentation [here](https://kiku.youyoumu.my.id/installation.html).
+There is no `.apkg` release yet. Build it and push it to a running Anki:
 
-## Demo
-[kanji-web.webm](https://github.com/user-attachments/assets/6d6027bf-0e68-4dc8-8f55-53eb04002fcf)
+1. Install [AnkiConnect](https://ankiweb.net/shared/info/2055492159) and keep Anki open, with no editor or browser window open.
+2. `pnpm install`
+3. `cd packages/note && pnpm apply`
 
-[See more features](https://kiku.youyoumu.my.id/features.html)
+`pnpm apply` creates the `Kiku English` note type on the first run and updates its templates afterwards. It assumes the Anki profile `User 1`; set `ANKI_COLLECTION_MEDIA_PATH` in `packages/note/.env` for another profile.
 
-## Support
+## Yomitan
 
-Found a bug or have a feature request?  
-Please [open an issue here](https://github.com/youyoumu/kiku/issues).
+In Yomitan settings, `Anki` > `Configure Anki flashcard`, pick `Kiku English` as the model:
+
+| Field                 | Value                                                         |
+| --------------------- | ------------------------------------------------------------- |
+| Expression            | `{expression}`                                                |
+| ExpressionReading     | `{phonetic-transcriptions}` (needs an IPA dictionary)         |
+| ExpressionAudio       | `{audio}`                                                     |
+| RelatedExpression     |                                                               |
+| SelectionText         | `{popup-selection-text}`                                      |
+| MainDefinition        | Optional. A `{single-glossary-...}` marker for one dictionary |
+| DefinitionPicture     |                                                               |
+| Sentence              | `{cloze-prefix}<b>{cloze-body}</b>{cloze-suffix}`             |
+| SentenceTranslation   |                                                               |
+| SentenceAudio         |                                                               |
+| Picture               |                                                               |
+| Glossary              | `{glossary}`                                                  |
+| Hint                  |                                                               |
+| IsWordAndSentenceCard |                                                               |
+| IsClickCard           |                                                               |
+| IsSentenceCard        |                                                               |
+| IsAudioCard           |                                                               |
+| Frequency             | `{frequencies}`                                               |
+| FreqSort              | `{frequency-harmonic-rank}`                                   |
+| MiscInfo              | `{document-title}`                                            |
+
+Put the English-English dictionary first in Yomitan's dictionary order: it becomes the first definition page, and the other dictionaries follow on the next pages.
+
+## asbplayer
+
+In asbplayer settings, `Anki`, pick `Kiku English` as the note type:
+
+| asbplayer field   | Note field          |
+| ----------------- | ------------------- |
+| Sentence          | Sentence            |
+| Word              | Expression          |
+| Audio             | SentenceAudio       |
+| Image             | Picture             |
+| Source            | MiscInfo            |
+| Translation       | SentenceTranslation |
+
+Mine the word with Yomitan first, then use asbplayer's "update last card" to add the picture and the sentence audio.
+
+## Limits
+
+- Related notes are found through AnkiConnect, so they show on desktop only. The Kiku Note Manager add-on builds its cache for the original `Kiku` note type, not this one.
+- AnkiDroid is not tested yet.
 
 ## Credit
 
-- [Lapis](https://github.com/donkuri/lapis), [JPMN](https://github.com/Aquafina-water-bottle/jp-mining-note), and [Senren](https://github.com/BrenoAqua/Senren) for inspiration.
-- Dictionary data based on [JMdict](https://www.edrdg.org/jmdict/j_jmdict.html).
-- Kanji decomposition data derived from [KanjiVG](https://kanjivg.tagaini.net/).
-- Additional metadata and heuristics were derived from publicly accessible information on WaniKani and JPDB.
-- [WaniKani Userscript](https://github.com/mwil/wanikani-userscripts) for the database used in earlier versions of the project.
-
-## Support Me
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U6U81PEJF0)
-
-You can also support me on [GitHub Sponsors](https://github.com/sponsors/youyoumu) 😄
+All of the design and nearly all of the code come from [Kiku](https://github.com/youyoumu/kiku) by youyoumu, released under the MIT licence. Kiku in turn credits [Lapis](https://github.com/donkuri/lapis), [JPMN](https://github.com/Aquafina-water-bottle/jp-mining-note) and [Senren](https://github.com/BrenoAqua/Senren).
