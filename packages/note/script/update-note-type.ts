@@ -7,6 +7,7 @@ import {
   getCssVarDark,
 } from "#/src/lib/config.js";
 import { defaultConfig } from "#/src/lib/default-config.js";
+import { ankiFieldsSkeleton } from "#/src/lib/types.js";
 import { paths } from "#/tools/paths.ts";
 import { AnkiConnect, log } from "#/tools/util.js";
 
@@ -75,11 +76,28 @@ class Script {
     console.log(`✅ Updated "${this.NOTE_TYPE}" style from ${basename(this.STYLE_PATH)}`);
   }
 
+  // No .apkg is shipped, so the first run has to create the note type itself.
+  async ensureNoteType(frontSrc: string, backSrc: string, styleSrc: string) {
+    const { result } = await AnkiConnect.call("modelNames");
+    if ((result as string[]).includes(this.NOTE_TYPE)) return;
+    const inOrderFields = Object.keys(ankiFieldsSkeleton).filter(
+      (f) => !f.includes(":") && f !== "Tags" && f !== "CardID",
+    );
+    await AnkiConnect.call("createModel", {
+      modelName: this.NOTE_TYPE,
+      inOrderFields,
+      css: styleSrc,
+      cardTemplates: [{ Name: this.CARD_TYPE, Front: frontSrc, Back: backSrc }],
+    });
+    console.log(`✅ Created note type "${this.NOTE_TYPE}" with ${inOrderFields.length} fields`);
+  }
+
   async run() {
     const { front, back, style } = await this.readTemplates();
     const frontTemplate = this.applyDataAttributes(front);
     const backTemplate = this.applyDataAttributes(back);
     const styleTemplate = this.buildStyleTemplate(style);
+    await this.ensureNoteType(frontTemplate, backTemplate, styleTemplate);
     await this.updateTemplates(frontTemplate, backTemplate);
     await this.updateStyling(styleTemplate);
   }

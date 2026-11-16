@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, type PluginOption } from "vite";
 import circularDpendency from "vite-plugin-circular-dependency";
@@ -24,7 +25,7 @@ export default defineConfig({
   },
   define: {
     __VERSION__: JSON.stringify(await getVersion()),
-    __COMMIT_SHA__: JSON.stringify(process.env.COMMIT_SHA ?? "dev"),
+    __COMMIT_SHA__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA ?? execSync("git rev-parse HEAD").toString().trim()),
   },
   build: {
     lib: {
