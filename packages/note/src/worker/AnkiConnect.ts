@@ -44,21 +44,15 @@ export class AnkiConnect {
   }
 
   async queryFieldContains({
-    kanjiList,
     readingList,
     expressionList,
     withNewNotes = true,
   }: {
-    kanjiList: string[];
     readingList: string[];
     expressionList: string[];
     withNewNotes?: boolean;
   }) {
     const noteFilter = `"note:Kiku English"`;
-
-    const kanjiPattern = kanjiList.map(escapeRegex).join("|");
-    const kanjiQuery =
-      kanjiList.length === 0 ? null : `${noteFilter} AND Expression:re:${kanjiPattern}`;
 
     const readingPattern = readingList.map(escapeRegex).join("|");
     const readingQuery =
@@ -74,7 +68,7 @@ export class AnkiConnect {
 
     const newQuery = `${noteFilter} AND is:new`;
 
-    const queries = [kanjiQuery, readingQuery, expressionQuery].filter(Boolean) as string[];
+    const queries = [readingQuery, expressionQuery].filter(Boolean) as string[];
     if (withNewNotes) queries.push(newQuery);
     const idsLists = await this.batchFindNotes(queries);
     const allIds = [...new Set(idsLists.flat())];
@@ -85,13 +79,8 @@ export class AnkiConnect {
       ? allNotes.filter((n) => newNoteIdsSet.has(n.noteId))
       : [];
 
-    const kanjiListResult: Record<string, AnkiNote[]> = {};
     const readingListResult: Record<string, AnkiNote[]> = {};
     const expressionListResult: Record<string, AnkiNote[]> = {};
-
-    for (const k of kanjiList) {
-      kanjiListResult[k] = allNotes.filter((n) => n.fields.Expression?.value.includes(k));
-    }
 
     for (const r of readingList) {
       readingListResult[r] = allNotes.filter((n) => n.fields.ExpressionReading?.value === r);
@@ -110,7 +99,6 @@ export class AnkiConnect {
     }
 
     return {
-      kanjiListResult,
       readingListResult,
       expressionListResult,
       newNotes,

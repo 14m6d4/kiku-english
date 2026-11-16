@@ -291,7 +291,7 @@ function RelatedExpressionSettings() {
         <ToggleSetting
           configKey="relatedExpressionFallback"
           label="Fallback"
-          tooltip="When disabled, only show explicitly related expressions without fallback to same expression, reading, forms, antonym, or referenced"
+          tooltip="When disabled, only show explicitly related expressions without fallback to same expression or reading"
         />
       </div>
     </Section>
@@ -354,17 +354,6 @@ function ModSettings() {
             values={[1000, 2000, 3000, 4000, 5000]}
             labels={["1s", "2s", "3s", "4s", "5s"]}
           />
-        </div>
-      </div>
-      <div>
-        <div class="text-lg font-bold flex gap-2 items-center">
-          Vertical
-          <div class="tooltip" data-tip="Expression appears in the vertical direction">
-            <InfoIcon class="size-4 text-base-content-calm" />
-          </div>
-        </div>
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] rounded-box gap-2 sm:gap-4">
-          <ToggleSetting configKey="modVertical" label="Enable" />
         </div>
       </div>
     </Section>
@@ -526,7 +515,7 @@ function FontSizeSettings() {
             <div class="text-lg font-bold">Mobile</div>
             <div class="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] rounded-box gap-x-4 gap-y-4 sm:gap-y-2">
               <FontSizeRangeSetting configKey="fontSizeBaseExpression" label="Expression" />
-              <FontSizeRangeSetting configKey="fontSizeBasePitch" label="Pitch" />
+              <FontSizeRangeSetting configKey="fontSizeBaseReading" label="Reading" />
               <FontSizeRangeSetting configKey="fontSizeBaseSentence" label="Sentence" />
               <FontSizeRangeSetting configKey="fontSizeBaseMiscInfo" label="Misc Info" />
               <FontSizeRangeSetting configKey="fontSizeBaseHint" label="Hint" />
@@ -536,7 +525,7 @@ function FontSizeSettings() {
             <div class="text-lg font-bold">Desktop</div>
             <div class="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] rounded-box gap-x-4 gap-y-4 sm:gap-y-2">
               <FontSizeRangeSetting configKey="fontSizeSmExpression" label="Expression" />
-              <FontSizeRangeSetting configKey="fontSizeSmPitch" label="Pitch" />
+              <FontSizeRangeSetting configKey="fontSizeSmReading" label="Reading" />
               <FontSizeRangeSetting configKey="fontSizeSmSentence" label="Sentence" />
               <FontSizeRangeSetting configKey="fontSizeSmMiscInfo" label="Misc Info" />
               <FontSizeRangeSetting configKey="fontSizeSmHint" label="Hint" />
@@ -693,7 +682,6 @@ function DebugSettings() {
       themeDark: dataset.themeDark?.toString() ?? "",
       blurNsfw: dataset.blurNsfw?.toString() ?? "",
       pictureOnFront: dataset.pictureOnFront?.toString() ?? "",
-      modVertical: dataset.modVertical?.toString() ?? "",
     });
   });
 

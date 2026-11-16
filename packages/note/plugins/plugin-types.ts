@@ -24,13 +24,11 @@ import type html from "solid-js/html";
 import type { JSX } from "solid-js/jsx-runtime";
 import type { createStore, Store } from "solid-js/store";
 import type { Portal } from "solid-js/web";
-import type { UseKanjiContext } from "#/src/lazy/contexts/KanjiContext";
 import type { UseAnkiFieldContext } from "#/src/contexts/AnkiFieldsContext";
 import type { UseBreakpointContext } from "#/src/contexts/BreakpointContext";
 import type { UseCardContext } from "#/src/contexts/CardContext";
 import type { UseConfigContext } from "#/src/contexts/ConfigContext";
 import type { UseGeneralContext } from "#/src/contexts/GeneralContext";
-import type { PitchInfo } from "#/src/lib/hatsuon";
 import type { AnkiFields } from "#/src/lib/types";
 
 /**
@@ -163,57 +161,6 @@ export type KikuPlugin = {
    * Adds custom content at the very end of the card (front and back).
    */
   CardEnd?: (props: { ctx: Ctx }) => JSX.Element | JSX.Element[];
-
-  /**
-   * Customizes the Pitch Accent visualizations.
-   * This is called for every pitch info entry found for the word.
-   */
-  Pitch?: (props: {
-    /** Data about the pitch (morae, accent index, etc.). */
-    pitchInfo: PitchInfo;
-    /** The index if multiple pitch entries exist. */
-    index: number;
-    /** The original Kiku pitch component. */
-    DefaultPitch: (props: {
-      pitchInfo: PitchInfo;
-      index: number;
-      ref?: (ref: HTMLDivElement) => void;
-    }) => JSX.Element;
-    ctx: Ctx;
-  }) => JSX.Element | JSX.Element[];
-
-  /**
-   * Customizes the extended Kanji Information section.
-   * This section appears when clicking a kanji to see its details.
-   */
-  KanjiInfoExtra?: (props: {
-    /** True if the user is in the dedicated Kanji Page view. */
-    inKanjiPage?: boolean;
-    /** The original Kiku kanji info. */
-    DefaultKanjiInfoExtra: () => JSX.Element;
-    /**
-     * Pre-rendered UI sections for the Kanji Detail view.
-     * You can return these within your `KanjiInfoExtra` plugin hook.
-     */
-    sections: {
-      VisuallySimilar: () => JSX.Element;
-      ComposedOf: () => JSX.Element;
-      UsedIn: () => JSX.Element;
-      Meanings: () => JSX.Element;
-      Related: () => JSX.Element;
-    };
-    /** Refs to the checkboxes in the UI for toggling sections. */
-    checkboxRef: {
-      visuallySimilar: undefined | HTMLInputElement;
-      composedOf: undefined | HTMLInputElement;
-      usedIn: undefined | HTMLInputElement;
-      meanings: undefined | HTMLInputElement;
-      related: undefined | HTMLInputElement;
-    };
-    /** Hook to access the current Kanji's data reactively. */
-    useKanjiContext: UseKanjiContext;
-    ctx: Ctx;
-  }) => JSX.Element | JSX.Element[];
 
   /**
    * Lifecycle Hook: Called once when the plugin module is loaded.

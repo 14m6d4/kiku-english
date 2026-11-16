@@ -7,7 +7,6 @@ import { useGeneralContext } from "#/src/contexts/GeneralContext";
 import { HeaderLayout } from "./HeaderLayout";
 import { ArrowLeftIcon, BoltIcon, PaintbrushIcon } from "./Icons";
 import { MergeContextModal } from "./MergeContextModal";
-import { useRelatedNotes } from "#/src/hooks/notes";
 
 export function HeaderMain(props: { onExitNested?: () => void }) {
   const { $initialSide, $$card, nested, isMergePreview } = useCardContext();
@@ -83,7 +82,7 @@ export function HeaderMain(props: { onExitNested?: () => void }) {
             </Match>
             <Match when={$$card.state === "ready" && $initialSide() === "back"}>
               <div class="text-base-content-soft cursor-pointer animate-fade-in-sm">
-                <KanjiPageIndicator />
+                <RelatedPageIndicator />
               </div>
             </Match>
           </Switch>
@@ -93,43 +92,34 @@ export function HeaderMain(props: { onExitNested?: () => void }) {
   );
 }
 
-function KanjiPageIndicator() {
+function RelatedPageIndicator() {
   return (
     <ErrorBoundary fallback={null}>
       <Suspense fallback={null}>
-        <$KanjiPageIndicator />
+        <$RelatedPageIndicator />
       </Suspense>
     </ErrorBoundary>
   );
 }
 
-function $KanjiPageIndicator() {
+function $RelatedPageIndicator() {
   const { $card, $setCard, $$card } = useCardContext();
   const { navigate } = useNavigationTransition();
 
-  const { $$relatedNotes } = useRelatedNotes();
+  const $$relatedNotes = () => $$card()?.relatedExpression ?? [];
 
   const $$length = createMemo(
     () =>
-      ($$card()?.noteList.length ?? 0) +
       (($$card()?.sameReading.length ?? 0) ? 1 : 0) +
       (($$card()?.sameExpression.length ?? 0) ? 1 : 0) +
       ($$relatedNotes().length ? 1 : 0),
   );
 
-  const onClick = ({
-    initialTab,
-    kanji,
-  }: {
-    initialTab: (typeof $card)["initialTab"];
-    kanji?: string;
-  }) => {
-    const isKanjiResult = ($$card()?.noteList.length ?? 0) > 0;
+  const onClick = ({ initialTab }: { initialTab: (typeof $card)["initialTab"] }) => {
     const isSameReadingResult = ($$card()?.sameReading.length ?? 0) > 0;
     const isSameExpressionResult = ($$card()?.sameExpression.length ?? 0) > 0;
     const isRelatedResult = $$relatedNotes().length > 0;
     const canOpen =
-      (initialTab === "kanji" && isKanjiResult) ||
       (initialTab === "reading" && isSameReadingResult) ||
       (initialTab === "same" && isSameExpressionResult) ||
       (initialTab === "related" && isRelatedResult);
@@ -137,35 +127,9 @@ function $KanjiPageIndicator() {
     if (!canOpen) return;
 
     $setCard("initialTab", initialTab);
-    $setCard("initialFocus", { kanji, noteId: undefined });
     $setCard("uniqueId", createUniqueId());
-    navigate("kanji", "forward", () => navigate("main", "back"));
+    navigate("related", "forward", () => navigate("main", "back"));
   };
-
-  function $KanjiIndicator() {
-    return ($$card()?.noteList ?? []).map(([kanji, data]) => {
-      return (
-        <button
-          class="flex gap-px sm:gap-0.5 items-start hover:text-base-content transition-colors cursor-pointer"
-          on:click={() => {
-            onClick({ initialTab: "kanji", kanji });
-          }}
-          on:touchend={(e) => e.stopPropagation()}
-        >
-          <span>{kanji}</span>
-          <span
-            class="bg-base-content/5 leading-none text-xs sm:text-sm rounded-xs"
-            classList={{
-              "p-px": $$length() <= 4,
-              "p-0": $$length() > 4,
-            }}
-          >
-            {data.length}
-          </span>
-        </button>
-      );
-    });
-  }
 
   function $SameReadingIndicator() {
     return (
@@ -176,7 +140,7 @@ function $KanjiPageIndicator() {
         }}
         on:touchend={(e) => e.stopPropagation()}
       >
-        <span>読</span>
+        <span>Reading</span>
         <span
           class="bg-base-content/5 leading-none text-xs sm:text-sm rounded-xs"
           classList={{
@@ -199,7 +163,7 @@ function $KanjiPageIndicator() {
         }}
         on:touchend={(e) => e.stopPropagation()}
       >
-        <span>同</span>
+        <span>Same</span>
         <span
           class="bg-base-content/5 leading-none text-xs sm:text-sm rounded-xs"
           classList={{
@@ -222,7 +186,7 @@ function $KanjiPageIndicator() {
         }}
         on:touchend={(e) => e.stopPropagation()}
       >
-        <span>関</span>
+        <span>Related</span>
         <span
           class="bg-base-content/5 leading-none text-xs sm:text-sm rounded-xs"
           classList={{
@@ -244,17 +208,6 @@ function $KanjiPageIndicator() {
         "gap-0": $$length() > 4,
       }}
     >
-      <$KanjiIndicator />
-
-      <Show
-        when={
-          ($$card()?.sameReading.length ?? 0) ||
-          ($$card()?.sameExpression.length ?? 0) ||
-          $$relatedNotes().length
-        }
-      >
-        <span>•</span>
-      </Show>
       <Show when={($$card()?.sameReading.length ?? 0) > 0}>
         <$SameReadingIndicator />
       </Show>

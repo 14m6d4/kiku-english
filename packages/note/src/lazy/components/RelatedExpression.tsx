@@ -64,50 +64,30 @@ function $RelatedExpression() {
         .sort(sortNote);
     }
 
-    // Priority 1: same expression, same reading, same kanji
-    let fallbackPriority1 = [
-      ...(query.sameExpression ?? []),
-      ...(query.sameReading ?? []),
-      ...query.noteList.flatMap((n) => {
-        return n[1];
-      }),
-    ];
-
-    // Priority 2: forms, antonym, referenced
-    let fallbackPriority2 = [
-      ...(query.forms ?? []),
-      ...(query.antonym ?? []),
-      ...(query.referenced ?? []),
-    ];
+    // Fallback: same expression, same reading
+    let fallback = [...(query.sameExpression ?? []), ...(query.sameReading ?? [])];
 
     // Priority 3: related expression
     let relatedExpression = query.relatedExpression;
 
     if (excludeNewCards) {
-      fallbackPriority1 = fallbackPriority1.filter((v) => !newCardIds.has(v.cards[0]));
-      fallbackPriority2 = fallbackPriority2.filter((v) => !newCardIds.has(v.cards[0]));
+      fallback = fallback.filter((v) => !newCardIds.has(v.cards[0]));
       relatedExpression = relatedExpression.filter((v) => !newCardIds.has(v.cards[0]));
     }
 
     if (!$config.relatedExpressionFallback) {
-      fallbackPriority1 = [];
-      fallbackPriority2 = [];
+      fallback = [];
     }
 
-    fallbackPriority1 = fallbackPriority1.sort(sortNote);
-    fallbackPriority2 = fallbackPriority2.sort(sortNote);
+    fallback = fallback.sort(sortNote);
 
-    // If related expression is less than 2, fill with fallback priority 2 and 1
+    // If related expression is less than 2, fill with the fallback
     if (relatedExpression?.length && relatedExpression.length < 2) {
-      return dedupeByCardId([
-        ...relatedExpression,
-        ...fallbackPriority2,
-        ...fallbackPriority1,
-      ]).slice(0, 2);
+      return dedupeByCardId([...relatedExpression, ...fallback]).slice(0, 2);
     } else if (relatedExpression?.length && relatedExpression.length >= 2) {
       return dedupeByCardId(relatedExpression);
     } else {
-      return dedupeByCardId([...fallbackPriority2, ...fallbackPriority1]).slice(0, 2);
+      return dedupeByCardId(fallback).slice(0, 2);
     }
   });
 

@@ -12,7 +12,6 @@ const definition = (dictionary: string, body: string) =>
 // Media files are not in the repo; the dev server serves them from your Anki collection if present.
 export const exampleFields: AnkiFields = {
   Expression: "registry",
-  ExpressionFurigana: "",
   ExpressionReading: "/ˈredʒɪstri/",
   ExpressionAudio: "",
   RelatedExpression: "",
@@ -23,7 +22,6 @@ export const exampleFields: AnkiFields = {
   ),
   DefinitionPicture: "",
   Sentence: sentence,
-  SentenceFurigana: "",
   SentenceTranslation: "",
   SentenceAudio: [
     `<span data-group-id="12">[sound:kikuen_demo_registry_12.wav]</span>`,
@@ -46,8 +44,6 @@ export const exampleFields: AnkiFields = {
   IsClickCard: "",
   IsSentenceCard: "",
   IsAudioCard: "",
-  PitchPosition: "",
-  PitchCategories: "",
   Frequency: `<ul style="text-align: left;"><li>Demo Frequency: 4821</li></ul>`,
   FreqSort: "4821",
   MiscInfo: [
@@ -57,10 +53,4 @@ export const exampleFields: AnkiFields = {
   ].join(""),
   Tags: "yomitan",
   CardID: "1785064007553",
-  "furigana:ExpressionFurigana": "",
-  "kana:ExpressionFurigana": "",
-  "furigana:Sentence": sentence,
-  "kanji:Sentence": sentence,
-  "furigana:SentenceFurigana": "",
-  "kana:SentenceFurigana": "",
 };

@@ -3,7 +3,6 @@ import type { Logger } from "./logger";
 
 export type AnkiFields = {
   Expression: string;
-  ExpressionFurigana: string;
   ExpressionReading: string;
   ExpressionAudio: string;
   RelatedExpression: string;
@@ -11,7 +10,6 @@ export type AnkiFields = {
   MainDefinition: string;
   DefinitionPicture: string;
   Sentence: string;
-  SentenceFurigana: string;
   SentenceAudio: string;
   SentenceTranslation: string;
   Picture: string;
@@ -21,21 +19,12 @@ export type AnkiFields = {
   IsClickCard: string;
   IsSentenceCard: string;
   IsAudioCard: string;
-  PitchPosition: string;
-  PitchCategories: string;
   Frequency: string;
   FreqSort: string;
   MiscInfo: string;
   Tags: string;
   CardID: string;
 
-  // === Variants (for furigana/kana helpers) ===
-  "furigana:ExpressionFurigana": string;
-  "kana:ExpressionFurigana": string;
-  "furigana:Sentence": string;
-  "kanji:Sentence": string;
-  "furigana:SentenceFurigana": string;
-  "kana:SentenceFurigana": string;
   __IS_ROOT__?: boolean;
 };
 
@@ -62,53 +51,8 @@ export type KikuNotesManifest = {
   generatedAt: number;
 };
 
-export type KikuDbMainManifest = {
-  files: Record<string, { start: number; end: number; size: number }>;
-};
-
-export type KanjiInfo = {
-  composedOf: string[];
-  usedIn: string[];
-  wkMeaning: string;
-  meanings: string[];
-  keyword: string;
-  readings: { reading: string; percentage: string }[];
-  frequency: string;
-  kind: string;
-  visuallySimilar: string[];
-  related: string[];
-};
-
-export type TermInfo = {
-  forms: string[];
-  antonym: string[];
-  referenced: string[];
-};
-
-export type TermInfoCompact = [
-  string[], // forms
-  string[], // antonym
-  string[], // referenced
-];
-
-export type Source = "forms" | "antonym" | "referenced" | "related";
-
-export type KanjiInfoCompact = [
-  string[], // composedOf
-  string[], // usedIn
-  string, // wkMeaning
-  string[], // meanings
-  string, // keyword
-  { reading: string; percentage: string }[], // readings
-  string, // frequency
-  string, // kind
-  string[], // visuallySimilar
-  string[], // related
-];
-
 export const ankiFieldsSkeleton: AnkiFields = {
   Expression: "",
-  ExpressionFurigana: "",
   ExpressionReading: "",
   ExpressionAudio: "",
   RelatedExpression: "",
@@ -116,7 +60,6 @@ export const ankiFieldsSkeleton: AnkiFields = {
   MainDefinition: "",
   DefinitionPicture: "",
   Sentence: "",
-  SentenceFurigana: "",
   SentenceTranslation: "",
   SentenceAudio: "",
   Picture: "",
@@ -126,23 +69,12 @@ export const ankiFieldsSkeleton: AnkiFields = {
   IsClickCard: "",
   IsSentenceCard: "",
   IsAudioCard: "",
-  PitchPosition: "",
-  PitchCategories: "",
   Frequency: "",
   FreqSort: "",
   MiscInfo: "",
   Tags: "",
   CardID: "",
-  "furigana:ExpressionFurigana": "",
-  "kana:ExpressionFurigana": "",
-  "furigana:Sentence": "",
-  "kanji:Sentence": "",
-  "furigana:SentenceFurigana": "",
-  "kana:SentenceFurigana": "",
 };
-
-export type PitchType = "heiban" | "atamadaka" | "nakadaka" | "odaka" | "kifuku";
-export const pitchTypes: PitchType[] = ["heiban", "atamadaka", "nakadaka", "odaka", "kifuku"];
 
 type AnkiResponse<T = unknown> = {
   success: boolean;
@@ -255,5 +187,4 @@ declare global {
 
 export type CacheStore = {
   workerApi?: WorkerApi;
-  kanjiInfo?: Map<string, KanjiInfo | undefined>;
 };

@@ -20,16 +20,9 @@ __pycache__
 /packages/note/.fonts/*
 /packages/note/.dicts/*
 /packages/note/.release/*
-/packages/note/.jmdict/*
-/packages/note/.jpdb/*
-/packages/note/.wk/*
-/packages/note/.kanjivg/*
-/packages/note/.db/*
 /packages/note/.anki-build/*
 /packages/note/.plugins/*
 /packages/note/.collection.media/*
-!/packages/note/.db/_kiku_db_main.tar
-!/packages/note/.db/_kiku_db_main_manifest.json
 
 apps/docs/.vitepress/cache
 

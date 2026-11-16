@@ -10,9 +10,9 @@
   line-height: var(--line-height-base-expression);
 }
 
-.pitch {
-  font-size: var(--font-size-base-pitch);
-  line-height: var(--line-height-base-pitch);
+.reading {
+  font-size: var(--font-size-base-reading);
+  line-height: var(--line-height-base-reading);
 }
 
 .sentence {
@@ -36,9 +36,9 @@
     line-height: var(--line-height-sm-expression);
   }
 
-  .pitch {
-    font-size: var(--font-size-sm-pitch);
-    line-height: var(--line-height-sm-pitch);
+  .reading {
+    font-size: var(--font-size-sm-reading);
+    line-height: var(--line-height-sm-reading);
   }
 
   .sentence {

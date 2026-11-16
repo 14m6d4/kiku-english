@@ -14,7 +14,7 @@ import type { Logger } from "#/src/lib/logger";
 import type { AnkiDroidAPI, AnkiNote, KikuNotesManifest } from "#/src/lib/types";
 import type { KikuPlugin } from "#/plugins/plugin-types";
 import type { WorkerApi } from "#/src/worker/client";
-import type { KanjiPageContextValue } from "#/src/lazy/contexts/KanjiPageContext";
+import type { RelatedPageContextValue } from "#/src/lazy/contexts/RelatedPageContext";
 import { useAnkiConnectConnection } from "#/src/hooks/connection";
 
 type GeneralStore = {
@@ -47,8 +47,7 @@ type GeneralContextValue = {
   isAnkiDroidOldStudyScreen: boolean;
   isAnkiDroidNewStudyScreen: boolean;
   initialDarkMode: boolean;
-  kanjiPageCache: Map<string, KanjiPageContextValue>;
-  kanjiInfoNotesCache: Map<string, [string, AnkiNote[]][]>;
+  relatedPageCache: Map<string, RelatedPageContextValue>;
   $$ankiConnect: Resource<boolean>;
   $checkAnkiConnect: (opt?: { onFail?: () => void }) => Promise<void>;
   $$notesManifest: Resource<KikuNotesManifest | undefined>;
@@ -107,8 +106,7 @@ export function GeneralContextProvider(props: {
   });
 
   const workerApi = Promise.withResolvers<WorkerApi>();
-  const kanjiPageCache = new Map<string, KanjiPageContextValue>();
-  const kanjiInfoNotesCache = new Map<string, [string, AnkiNote[]][]>();
+  const relatedPageCache = new Map<string, RelatedPageContextValue>();
   const [$$notesManifest] = createResource(
     () => workerApi,
     async (workerApiContainer) => {
@@ -149,8 +147,7 @@ export function GeneralContextProvider(props: {
         isAnkiDroidOldStudyScreen: props.isAnkiDroidOldStudyScreen,
         isAnkiDroidNewStudyScreen: props.isAnkiDroidNewStudyScreen,
         initialDarkMode: props.initialDarkMode,
-        kanjiPageCache,
-        kanjiInfoNotesCache,
+        relatedPageCache,
         $$ankiConnect,
         $checkAnkiConnect,
         $$notesManifest,

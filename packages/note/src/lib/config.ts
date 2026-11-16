@@ -20,18 +20,17 @@ export type KikuConfig = {
   preferAnkiConnect: boolean;
   modHidden: boolean;
   modHiddenDuration: number;
-  modVertical: boolean;
   definitionStyle: DefinitionStyle;
   definitionPictureFromGlossary: boolean;
   relatedExpressionExcludeNewCards: boolean;
   relatedExpressionFallback: boolean;
   fontSizeBaseExpression: TailwindSize;
-  fontSizeBasePitch: TailwindSize;
+  fontSizeBaseReading: TailwindSize;
   fontSizeBaseSentence: TailwindSize;
   fontSizeBaseMiscInfo: TailwindSize;
   fontSizeBaseHint: TailwindSize;
   fontSizeSmExpression: TailwindSize;
-  fontSizeSmPitch: TailwindSize;
+  fontSizeSmReading: TailwindSize;
   fontSizeSmSentence: TailwindSize;
   fontSizeSmMiscInfo: TailwindSize;
   fontSizeSmHint: TailwindSize;
@@ -78,7 +77,6 @@ const rootDatasetArray = [
   "themeDark",
   "blurNsfw",
   "pictureOnFront",
-  "modVertical",
 ] as const;
 export type RootDatasetKey = (typeof rootDatasetArray)[number];
 export type RootDataset = Partial<Record<RootDatasetKey, string>>;
@@ -108,19 +106,18 @@ export function validateConfig(config: KikuConfig, logger?: Logger): KikuConfig 
 
       modHidden: typeof config.modHidden === "boolean" ? config.modHidden : defaultConfig.modHidden,
       modHiddenDuration: typeof config.modHiddenDuration === "number" && config.modHiddenDuration > 0 ? config.modHiddenDuration : defaultConfig.modHiddenDuration,
-      modVertical: typeof config.modVertical === "boolean" ? config.modVertical : defaultConfig.modVertical,
       definitionStyle: definitionStyle.includes(config.definitionStyle) ? config.definitionStyle : defaultConfig.definitionStyle,
       definitionPictureFromGlossary: typeof config.definitionPictureFromGlossary === "boolean" ? config.definitionPictureFromGlossary : defaultConfig.definitionPictureFromGlossary,
       relatedExpressionExcludeNewCards: typeof config.relatedExpressionExcludeNewCards === "boolean" ? config.relatedExpressionExcludeNewCards : defaultConfig.relatedExpressionExcludeNewCards,
       relatedExpressionFallback: typeof config.relatedExpressionFallback === "boolean" ? config.relatedExpressionFallback : defaultConfig.relatedExpressionFallback,
 
       fontSizeBaseExpression: tailwindSize.includes(config.fontSizeBaseExpression) ? config.fontSizeBaseExpression : defaultConfig.fontSizeBaseExpression,
-      fontSizeBasePitch: tailwindSize.includes(config.fontSizeBasePitch) ? config.fontSizeBasePitch : defaultConfig.fontSizeBasePitch,
+      fontSizeBaseReading: tailwindSize.includes(config.fontSizeBaseReading) ? config.fontSizeBaseReading : defaultConfig.fontSizeBaseReading,
       fontSizeBaseSentence: tailwindSize.includes(config.fontSizeBaseSentence) ? config.fontSizeBaseSentence : defaultConfig.fontSizeBaseSentence,
       fontSizeBaseMiscInfo: tailwindSize.includes(config.fontSizeBaseMiscInfo) ? config.fontSizeBaseMiscInfo : defaultConfig.fontSizeBaseMiscInfo,
       fontSizeBaseHint: tailwindSize.includes(config.fontSizeBaseHint) ? config.fontSizeBaseHint : defaultConfig.fontSizeBaseHint,
       fontSizeSmExpression: tailwindSize.includes(config.fontSizeSmExpression) ? config.fontSizeSmExpression : defaultConfig.fontSizeSmExpression,
-      fontSizeSmPitch: tailwindSize.includes(config.fontSizeSmPitch) ? config.fontSizeSmPitch : defaultConfig.fontSizeSmPitch,
+      fontSizeSmReading: tailwindSize.includes(config.fontSizeSmReading) ? config.fontSizeSmReading : defaultConfig.fontSizeSmReading,
       fontSizeSmSentence: tailwindSize.includes(config.fontSizeSmSentence) ? config.fontSizeSmSentence : defaultConfig.fontSizeSmSentence,
       fontSizeSmMiscInfo: tailwindSize.includes(config.fontSizeSmMiscInfo) ? config.fontSizeSmMiscInfo : defaultConfig.fontSizeSmMiscInfo,
       fontSizeSmHint: tailwindSize.includes(config.fontSizeSmHint) ? config.fontSizeSmHint : defaultConfig.fontSizeSmHint,
@@ -145,8 +142,8 @@ export type CssVar = {
 
   "--font-size-base-expression": string;
   "--line-height-base-expression": string;
-  "--font-size-base-pitch": string;
-  "--line-height-base-pitch": string;
+  "--font-size-base-reading": string;
+  "--line-height-base-reading": string;
   "--font-size-base-sentence": string;
   "--line-height-base-sentence": string;
   "--font-size-base-misc-info": string;
@@ -156,8 +153,8 @@ export type CssVar = {
 
   "--font-size-sm-expression": string;
   "--line-height-sm-expression": string;
-  "--font-size-sm-pitch": string;
-  "--line-height-sm-pitch": string;
+  "--font-size-sm-reading": string;
+  "--line-height-sm-reading": string;
   "--font-size-sm-sentence": string;
   "--line-height-sm-sentence": string;
   "--font-size-sm-misc-info": string;
@@ -183,8 +180,6 @@ export type Dataset = {
   "data-tags": string;
   "data-nsfw": "true" | "false";
   "data-blur-nsfw": "true" | "false";
-  "data-pitch-type": string;
-  "data-has-pitch": string;
   "data-has-hint": string;
   "data-has-picture": string;
   "data-dictionary": string;
@@ -198,7 +193,6 @@ export function getRootDatasetConfig(config: KikuConfig): RootDataset {
     themeDark: config.themeDark,
     blurNsfw: config.blurNsfw ? "true" : "false",
     pictureOnFront: config.pictureOnFront ? "true" : "false",
-    modVertical: config.modVertical ? "true" : "false",
   };
 }
 
@@ -210,8 +204,8 @@ export function getCssVar(config: KikuConfig) {
 
     "--font-size-base-expression": tailwindFontSizeVar[config.fontSizeBaseExpression].fontSize,
     "--line-height-base-expression": tailwindFontSizeVar[config.fontSizeBaseExpression].lineHeight,
-    "--font-size-base-pitch": tailwindFontSizeVar[config.fontSizeBasePitch].fontSize,
-    "--line-height-base-pitch": tailwindFontSizeVar[config.fontSizeBasePitch].lineHeight,
+    "--font-size-base-reading": tailwindFontSizeVar[config.fontSizeBaseReading].fontSize,
+    "--line-height-base-reading": tailwindFontSizeVar[config.fontSizeBaseReading].lineHeight,
     "--font-size-base-sentence": tailwindFontSizeVar[config.fontSizeBaseSentence].fontSize,
     "--line-height-base-sentence": tailwindFontSizeVar[config.fontSizeBaseSentence].lineHeight,
     "--font-size-base-misc-info": tailwindFontSizeVar[config.fontSizeBaseMiscInfo].fontSize,
@@ -221,8 +215,8 @@ export function getCssVar(config: KikuConfig) {
 
     "--font-size-sm-expression": tailwindFontSizeVar[config.fontSizeSmExpression].fontSize,
     "--line-height-sm-expression": tailwindFontSizeVar[config.fontSizeSmExpression].lineHeight,
-    "--font-size-sm-pitch": tailwindFontSizeVar[config.fontSizeSmPitch].fontSize,
-    "--line-height-sm-pitch": tailwindFontSizeVar[config.fontSizeSmPitch].lineHeight,
+    "--font-size-sm-reading": tailwindFontSizeVar[config.fontSizeSmReading].fontSize,
+    "--line-height-sm-reading": tailwindFontSizeVar[config.fontSizeSmReading].lineHeight,
     "--font-size-sm-sentence": tailwindFontSizeVar[config.fontSizeSmSentence].fontSize,
     "--line-height-sm-sentence": tailwindFontSizeVar[config.fontSizeSmSentence].lineHeight,
     "--font-size-sm-misc-info": tailwindFontSizeVar[config.fontSizeSmMiscInfo].fontSize,
@@ -266,7 +260,6 @@ export function updateConfigState({
   root.dataset.themeDark = dataset.themeDark;
   root.dataset.blurNsfw = dataset.blurNsfw;
   root.dataset.pictureOnFront = dataset.pictureOnFront;
-  root.dataset.modVertical = dataset.modVertical;
 
   if (styleTags.length > 0) {
     const lightTemplate = generateCssVars(getCssVar(config));

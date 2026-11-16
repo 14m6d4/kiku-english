@@ -383,7 +383,6 @@ export class KikuHostAnki extends KikuHost {
       themeDark: root.dataset.themeDark,
       blurNsfw: root.dataset.blurNsfw,
       pictureOnFront: root.dataset.pictureOnFront,
-      modVertical: root.dataset.modVertical,
     };
     logger.debug("[init] rootDataset:", rootDataset);
     return rootDataset;
