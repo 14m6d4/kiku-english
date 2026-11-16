@@ -21,7 +21,7 @@ There is no `.apkg` release yet. Build it and push it to a running Anki:
 2. `pnpm install`
 3. `cd packages/note && pnpm apply`
 
-`pnpm apply` creates the `Kiku English` note type on the first run and updates its templates afterwards. It assumes the Anki profile `User 1`; set `ANKI_COLLECTION_MEDIA_PATH` in `packages/note/.env` for another profile.
+`pnpm apply` creates the `Kiku English` note type on the first run and updates its templates afterwards. It assumes the Anki profile `User 1`; for another profile set `ANKI_USER` (or `ANKI_COLLECTION_MEDIA_PATH`) in `packages/note/.env`, starting from `.env.example`.
 
 ## Yomitan
 
@@ -56,16 +56,38 @@ Put the English-English dictionary first in Yomitan's dictionary order: it becom
 
 In asbplayer settings, `Anki`, pick `Kiku English` as the note type:
 
-| asbplayer field   | Note field          |
-| ----------------- | ------------------- |
-| Sentence          | Sentence            |
-| Word              | Expression          |
-| Audio             | SentenceAudio       |
-| Image             | Picture             |
-| Source            | MiscInfo            |
-| Translation       | SentenceTranslation |
+| asbplayer field | Note field          |
+| --------------- | ------------------- |
+| Sentence        | Sentence            |
+| Word            | Expression          |
+| Audio           | SentenceAudio       |
+| Image           | Picture             |
+| Source          | MiscInfo            |
+| Translation     | SentenceTranslation |
 
 Mine the word with Yomitan first, then use asbplayer's "update last card" to add the picture and the sentence audio.
+
+## Plugins
+
+The card loads `_kikuen_plugin.js` and `_kikuen_plugin.css` from Anki's `collection.media`; `pnpm apply` ships them empty. Write your own (hooks are typed in `packages/note/plugins/plugin-types.ts`) or install an example from `packages/note/plugins/`:
+
+```sh
+cd packages/note
+pnpm plugin:copy confetti     # or plugin:symlink to edit it in place
+```
+
+Installing a plugin overwrites the current `_kikuen_plugin.*` files, so only one example is active at a time. Run either command without a name to list the examples.
+
+`pnpm apply` resets both files to the empty stubs every time, so install the plugin again after each apply.
+
+## Development
+
+From `packages/note`:
+
+- `pnpm dev` serves a preview of the card's back side on <http://localhost:5173>; add `?side=front#` for the front. Example fields come from `src/lib/examples.ts`.
+- `pnpm apply` builds and pushes the note type to Anki (see Install). `pnpm apply:fast` skips the type check, but needs a POSIX shell.
+
+From the root: `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`.
 
 ## Limits
 

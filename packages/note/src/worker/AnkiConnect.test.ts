@@ -63,12 +63,12 @@ describe("escapeRegex", () => {
     expect(escapeRegex(".*+?^${}()|[]\\")).toBe("\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\|\\[\\]\\\\");
   });
 
-  it("should handle Japanese characters without escaping them", () => {
-    expect(escapeRegex("食べる")).toBe("食べる");
-    expect(escapeRegex("かく")).toBe("かく");
+  it("should leave non-ASCII letters unescaped", () => {
+    expect(escapeRegex("café")).toBe("café");
+    expect(escapeRegex("naïve")).toBe("naïve");
   });
 
-  it("should escape special chars in Japanese text", () => {
-    expect(escapeRegex("a(b)c")).toBe("a\\(b\\)c");
+  it("should escape special chars next to non-ASCII letters", () => {
+    expect(escapeRegex("café(s)")).toBe("café\\(s\\)");
   });
 });
