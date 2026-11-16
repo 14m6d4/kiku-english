@@ -11,12 +11,8 @@ describe("parseRelatedExpression", () => {
     expect(parseRelatedExpression("apple, banana, cherry")).toEqual(["apple", "banana", "cherry"]);
   });
 
-  it("should parse expressions separated by Japanese commas (ideographic)", () => {
-    expect(parseRelatedExpression("りんご、ばなな、さくらんぼ")).toEqual([
-      "りんご",
-      "ばなな",
-      "さくらんぼ",
-    ]);
+  it("should parse expressions separated by ideographic commas", () => {
+    expect(parseRelatedExpression("apple、banana、cherry")).toEqual(["apple", "banana", "cherry"]);
   });
 
   it("should parse expressions separated by semicolons (English and Fullwidth)", () => {

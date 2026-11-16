@@ -9,7 +9,7 @@ Kiku English is an Anki note type for English sentence mining (Yomitan + asbplay
 pnpm + Turborepo monorepo, Node >= 24. Run from the root unless noted.
 
 - `pnpm typecheck` / `pnpm test` / `pnpm lint` / `pnpm format` (oxlint + oxfmt; `lint:fix`, `format:fix` to apply)
-- Single test file (in `packages/note`): `pnpm vitest run src/lib/text.test.ts`; single test: add `-t "<name>"`
+- Single test file (in `packages/note`): `pnpm vitest run src/lib/parse-related-expression.test.ts`; single test: add `-t "<name>"`
 - `cd packages/note && pnpm dev`: Vite dev server on :5173 serving `preview/anki/index.html`, which mimics Anki's webview. Switch sides with `?side=front#` / `?side=back#`; example field values come from `src/lib/examples.ts`.
 - `cd packages/note && pnpm apply`: build, generate templates, copy files into Anki's `collection.media`, and update the `Kiku English` note type through AnkiConnect. Needs Anki open with AnkiConnect, no editor/browser window. `apply:fast` skips tsc and dts.
 
