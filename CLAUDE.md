@@ -17,7 +17,7 @@ Scripts that touch Anki read `packages/note/.env` (`ANKI_USER`, default `User 1`
 
 ## Architecture
 
-`packages/note` is the product. `apps/docs` (VitePress) and `packages/addon` (Python Anki add-on, Kiku Note Manager) are upstream leftovers that still describe and target upstream's `_kiku` files and `Kiku` note type; the addon is not forked (see the ADR).
+`packages/note` is the only package. Upstream's docs site and Kiku Note Manager addon were deleted, not forked (see the ADR).
 
 ### The card is a SolidJS app shipped as Anki media
 

@@ -1,10 +1,8 @@
 node_modules
 dist
 *.local
-.venv
 .env
 .turbo
-__pycache__
 .circularDependency.json
 
 .vscode/*
@@ -23,8 +21,6 @@ __pycache__
 /packages/note/.anki-build/*
 /packages/note/.plugins/*
 /packages/note/.collection.media/*
-
-apps/docs/.vitepress/cache
 
 .lazy.lua
 .TODO.md

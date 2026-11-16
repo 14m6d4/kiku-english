@@ -11,4 +11,5 @@ Kiku is built for Japanese, and its maintainer declined to support other languag
 ## Consequences
 
 - Both note types share one Anki collection, so every runtime name (media files, globals, custom elements, storage keys) must stay distinct from upstream's.
-- Upstream's Kiku Note Manager addon does not recognise this note type; it is not forked.
+- Upstream's Kiku Note Manager addon does not recognise this note type; it is not forked, and its source (`packages/addon`) is deleted from the repo. Related notes go through AnkiConnect from the card itself.
+- Upstream's VitePress docs site (`apps/docs`) is deleted rather than adapted: it documented Japanese-only features and `_kiku` files, and we do not publish a docs site. Install and setup instructions live in the README.
